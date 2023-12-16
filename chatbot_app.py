@@ -57,9 +57,9 @@ def user_input(user_question):
     st.session_state.chatHistory = response['chat_history']
     for i, message in enumerate(st.session_state.chatHistory):
         if i % 2 == 0:
-            st.write("Human: ", message.content)
+            st.write("Human: \n", message.content)
         else:
-            st.write("Bot: ", message.content)
+            st.write("🤖: \n", message.content)
 
 
 def main():
