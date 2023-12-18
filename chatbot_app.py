@@ -76,7 +76,7 @@ def main():
         st.title("Settings")
         st.subheader("Upload your Documents")
         pdf_docs = st.file_uploader(
-            "Upload your PDF Files and Click on the Process Button", accept_multiple_files=True)
+            "Upload your PDF Files and Click on the Process Button", accept_multiple_files=False)
         if st.button("Process"):
             with st.spinner("Processing"):
                 raw_text = get_pdf_text(pdf_docs)
