@@ -88,8 +88,8 @@ def main():
                 st.success("Done")
         if pdf_docs is not None:
             file_details = {
-                "Filename": uploaded_file.name,
-                "File size": get_file_size(uploaded_file)
+                "Filename": pdf_docs.name,
+                "File size": get_file_size(pdf_docs)
             }
             st.markdown("<h4 style color:black;'>File details</h4>", unsafe_allow_html=True)
             st.json(file_details)
