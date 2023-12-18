@@ -7,7 +7,8 @@ from langchain.llms import GooglePalm
 from langchain.vectorstores import FAISS
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
-import os, io
+import os
+from io import BytesIO
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -20,11 +21,9 @@ def get_file_size(file):
     # file_size = file.tell()
     # file.seek(0)
     # return file_size
-    file_like_object = io.BytesIO(file)
-    file_like_object.seek(0, io.SEEK_END)
-    file_size = file_like_object.tell()
-    file_like_object.seek(0)
-    return file_size
+    return file.getbuffer().nbytes
+
+    
     
 
 def get_pdf_text(pdf_docs):
@@ -94,7 +93,7 @@ def main():
         if pdf_docs is not None:
             file_details = {
                 "Filename": pdf_docs.name,
-                "File size": get_file_size(pdf_docs)
+                "File size": f'{get_file_size(pdf_docs)} bytes'
             }
             st.markdown("<h4 style color:black;'>File details</h4>",
                         unsafe_allow_html=True)
