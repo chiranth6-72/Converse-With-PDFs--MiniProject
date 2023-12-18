@@ -16,10 +16,11 @@ google_api_key = os.getenv("GOOGLE_API_KEY")
 
 
 def get_file_size(file):
-    file.seek(0, os.SEEK_END)
-    file_size = file.tell()
-    file.seek(0)
-    return file_size
+    # file.seek(0, os.SEEK_END)
+    # file_size = file.tell()
+    # file.seek(0)
+    # return file_size
+    return os.path.getsize(file_path)
 
 
 def get_pdf_text(pdf_docs):
@@ -91,7 +92,8 @@ def main():
                 "Filename": pdf_docs.name,
                 "File size": get_file_size(pdf_docs)
             }
-            st.markdown("<h4 style color:black;'>File details</h4>", unsafe_allow_html=True)
+            st.markdown("<h4 style color:black;'>File details</h4>",
+                        unsafe_allow_html=True)
             st.json(file_details)
 
         # if pdf_docs is not None:
