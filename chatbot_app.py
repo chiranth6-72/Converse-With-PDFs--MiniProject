@@ -23,8 +23,6 @@ def get_file_size(file):
     # return file_size
     return file.getbuffer().nbytes
 
-    
-    
 
 def get_pdf_text(pdf_docs):
     text = ""
@@ -34,10 +32,19 @@ def get_pdf_text(pdf_docs):
             text += page.extract_text()
     return text
 
+# def get_pdf_text(pdf_docs):
+#     text = ""
+#     for pdf in pdf_docs:
+#         file_like_object = BytesIO(pdf)
+#         pdf_reader = PdfReader(file_like_object)
+#         for page in pdf_reader.pages:
+#             text += page.extract_text()
+#     return text
+
 
 def get_text_chunks(text):
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000, chunk_overlap=200)
+        chunk_size=1000, chunk_overlap=20)
     chunks = text_splitter.split_text(text)
     return chunks
 
@@ -60,11 +67,15 @@ def get_conversational_chain(vector_store):
 def user_input(user_question):
     response = st.session_state.conversation({'question': user_question})
     st.session_state.chatHistory = response['chat_history']
-    for i, message in enumerate(st.session_state.chatHistory):
+    for i, message in enumerate(reversed(st.session_state.chatHistory)):
         if i % 2 == 0:
-            st.write("Human: \n", message.content)
+            st.write("Human🗣️:")
+            st.write(f"\t{message.content}")
         else:
-            st.write("🤖: \n", message.content)
+            st.write("PDFbot🤖:")
+            st.write(f"\t{message.content}")
+
+    pass
 
 
 def main():
@@ -81,23 +92,28 @@ def main():
         st.title("Settings")
         st.subheader("Upload your Documents")
         pdf_docs = st.file_uploader(
-            "Upload your PDF Files and Click on the Process Button", accept_multiple_files=False)
+            "Upload your PDF Files and Click on the Process Button", accept_multiple_files=True, type=['pdf'])
+
+        # pdf_bytes = None
         if st.button("Process"):
             with st.spinner("Processing"):
+                # pdf_bytes = pdf_docs.read()
+                # raw_text = get_pdf_text(pdf_bytes)
                 raw_text = get_pdf_text(pdf_docs)
                 text_chunks = get_text_chunks(raw_text)
                 vector_store = get_vector_store(text_chunks)
                 st.session_state.conversation = get_conversational_chain(
                     vector_store)
                 st.success("Done")
-        if pdf_docs is not None:
-            file_details = {
-                "Filename": pdf_docs.name,
-                "File size": f'{get_file_size(pdf_docs)} bytes'
-            }
-            st.markdown("<h4 style color:black;'>File details</h4>",
-                        unsafe_allow_html=True)
-            st.json(file_details)
+
+        # if pdf_bytes is not None:
+        #     file_details = {
+        #         "Filename": pdf_docs.name,
+        #         "File size": f'{len(pdf_bytes)} bytes'
+        #     }
+        #     st.markdown("<h4 style color:black;'>File details</h4>",
+        #                 unsafe_allow_html=True)
+        #     st.json(file_details)
 
         # if pdf_docs is not None:
         #     for uploaded_file in pdf_docs:
