@@ -20,7 +20,8 @@ def get_file_size(file):
     # file_size = file.tell()
     # file.seek(0)
     # return file_size
-    return os.path.getsize(file_path)
+    # return os.path.getsize(file_path)
+    return len(file)
 
 
 def get_pdf_text(pdf_docs):
