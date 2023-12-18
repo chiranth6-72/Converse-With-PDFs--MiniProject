@@ -21,6 +21,7 @@ def get_file_size(file):
     file.seek(0)
     return file_size
 
+
 def get_pdf_text(pdf_docs):
     text = ""
     for pdf in pdf_docs:
@@ -86,13 +87,21 @@ def main():
                     vector_store)
                 st.success("Done")
         if pdf_docs is not None:
-            for uploaded_file in pdf_docs:
-                file_details = {
-                    "Filename": uploaded_file.name,
-                    "File size": get_file_size(uploaded_file)  # File size is calculated here
-                }
-                st.markdown("<h4 style color:black;'>File details</h4>", unsafe_allow_html=True)
-                st.json(file_details)  
+            file_details = {
+                "Filename": uploaded_file.name,
+                "File size": get_file_size(uploaded_file)
+            }
+            st.markdown("<h4 style color:black;'>File details</h4>", unsafe_allow_html=True)
+            st.json(file_details)
+
+        # if pdf_docs is not None:
+        #     for uploaded_file in pdf_docs:
+        #         file_details = {
+        #             "Filename": uploaded_file.name,
+        #             "File size": get_file_size(uploaded_file)  # File size is calculated here
+        #         }
+        #         st.markdown("<h4 style color:black;'>File details</h4>", unsafe_allow_html=True)
+        #         st.json(file_details)
 
 
 if __name__ == "__main__":
